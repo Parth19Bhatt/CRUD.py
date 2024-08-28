@@ -1,7 +1,7 @@
 import sqlite3
+
 def CreateTable(): 
     conn = sqlite3.connect('User.db')
-
     # Create a cursor object using the connection
     cursor = conn.cursor()
     
@@ -9,11 +9,10 @@ def CreateTable():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Users (
             Username varchar(500),
-            Password Hash password,
+            Password password,
             active BOOLEAN NOT NULL
         )
     ''')
-    
     # Commit changes and close the connection
     conn.commit()
     conn.close()
@@ -21,12 +20,10 @@ def CreateTable():
 def create_user(Username, Password, active):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO Users (Username, Password, active) VALUES (?, ?)', (Username, Password, active))
+    cursor.execute('INSERT INTO Users (Username, Password, active) VALUES (?, ?,?)', (Username, Password, active))
     conn.commit()
     conn.close()
 
-# Example usage
-create_user('Alice', 'Alice', True)
 def read_users():
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
@@ -34,21 +31,13 @@ def read_users():
     rows = cursor.fetchall()
     conn.close()
     return rows
-
-# Example usage
-users = read_users()
-for user in users:
-    print(user)
     
 def update_user(Username, Password, active):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('UPDATE Users SET name = ?, age = ? WHERE id = ?', (Username, Password, active))
+    cursor.execute('UPDATE Users SET Username = ?, Password = ?, active = ? WHERE id = ?', (Username, Password, active))
     conn.commit()
     conn.close()
-
-# Example usage
-update_user('Alice Smith','Alice', True)
 
 def delete_user(Username):
     conn = sqlite3.connect('User.db')
@@ -58,11 +47,22 @@ def delete_user(Username):
     conn.close()
 
 # Example usage
-delete_user('Alice')
-
-
-if __name__ == '__main__':
-    # CreateTable("User.db")
+# delete_user('Alice')
+if __name__ == "__main__":
+    # Create a table
     CreateTable()
-    # create_user()
-    # read_users()
+    
+    # Create Data in the table
+    create_user('Alice', 'Alice', True)
+    create_user('Sam', 'Sam', True)
+    
+    # Display Data in the Table
+    users = read_users()
+    for user in users:
+        print(user)
+    
+    # UPdate Data in the Table
+    update_user('Alice Smith','Alice', True)
+    
+    # Delete Data From the Table.
+    delete_user('Alice Smith')
