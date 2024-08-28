@@ -46,8 +46,6 @@ def delete_user(Username):
     conn.commit()
     conn.close()
 
-# Example usage
-# delete_user('Alice')
 if __name__ == "__main__":
     # Create a table
     CreateTable()
