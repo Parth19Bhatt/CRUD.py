@@ -8,6 +8,7 @@ def CreateTable():
     # Create a table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS Users (
+            Id Primary key,
             Username varchar(500),
             Password password,
             active BOOLEAN NOT NULL
@@ -17,10 +18,10 @@ def CreateTable():
     conn.commit()
     conn.close()
 
-def create_user(Username, Password, active):
+def create_user(ID,Username, Password, active):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO Users (Username, Password, active) VALUES (?, ?,?)', (Username, Password, active))
+    cursor.execute('INSERT INTO Users (Username, Password, active) VALUES (?, ?,?,?)', (ID,Username, Password, active))
     conn.commit()
     conn.close()
 
@@ -32,27 +33,29 @@ def read_users():
     conn.close()
     return rows
     
-def update_user(Username, Password, active):
+def update_user(ID,Username, Password, active):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('UPDATE Users SET Username = ?, Password = ?, active = ? WHERE id = ?', (Username, Password, active))
+    cursor.execute('UPDATE Users SET Username = ?, Password = ?, active = ? WHERE id = ?', (ID,Username, Password, active))
     conn.commit()
     conn.close()
 
 def delete_user(Username):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM Users WHERE id = ?', (Username,))
+    cursor.execute('DELETE FROM Users WHERE Username = ?', (Username,))
     conn.commit()
     conn.close()
 
+# Example usage
+# delete_user('Alice')
 if __name__ == "__main__":
     # Create a table
     CreateTable()
     
     # Create Data in the table
-    create_user('Alice', 'Alice', True)
-    create_user('Sam', 'Sam', True)
+    create_user(0,'Alice', 'Alice', True)
+    create_user(1,'Sam', 'Sam', True)
     
     # Display Data in the Table
     users = read_users()
@@ -60,7 +63,7 @@ if __name__ == "__main__":
         print(user)
     
     # UPdate Data in the Table
-    update_user('Alice Smith','Alice', True)
+    update_user(0,'Alice Smith','Alice', True)
     
     # Delete Data From the Table.
     delete_user('Alice Smith')
