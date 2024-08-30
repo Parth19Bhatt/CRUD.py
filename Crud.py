@@ -35,16 +35,17 @@ def read_users():
 def update_user(Username, Password, active):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('UPDATE Users SET Username = ?, Password = ?, active = ? WHERE id = ?', (Username, Password, active))
+    cursor.execute('UPDATE Users SET Password = ?, active = ? WHERE Username = ?', (Username, Password, active))
     conn.commit()
     conn.close()
 
 def delete_user(Username):
     conn = sqlite3.connect('User.db')
     cursor = conn.cursor()
-    cursor.execute('DELETE FROM Users WHERE id = ?', (Username,))
+    cursor.execute('DELETE FROM Users WHERE Username = ?', (Username,))
     conn.commit()
     conn.close()
+
 
 if __name__ == "__main__":
     # Create a table
@@ -60,7 +61,7 @@ if __name__ == "__main__":
         print(user)
     
     # UPdate Data in the Table
-    update_user('Alice Smith','Alice', True)
+    update_user('Alice','Alice123', True)
     
     # Delete Data From the Table.
-    delete_user('Alice Smith')
+    delete_user('Alice')
